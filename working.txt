@@ -1,0 +1,46 @@
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { app } from './firebaseConfig';
+
+export default function App() {
+  const auth = getAuth(app);
+
+  const signup = async (email, password) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log('User created:', email);
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error('Error creating user:', errorCode, errorMessage);
+    }
+  };
+
+  const handleSignup = () => {
+    signup('hema@example.com', 'password1234'); // Provide an email and password here
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text>Open up App.js to start working on your app!</Text>
+      <StatusBar style="auto" />
+      <Pressable
+        style={{ width: 200, height: 200, backgroundColor: 'black', justifyContent: 'center' }}
+        onPress={handleSignup}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+
