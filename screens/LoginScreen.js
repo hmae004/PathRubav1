@@ -18,7 +18,10 @@ export default function LoginScreen() {
         try{
           const userCredential = await signInWithEmailAndPassword(auth,email,password);
           const user = userCredential.user;
-          navigation.navigate('Main');
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Main' }], // Name of the screen to navigate after login
+          });
     
         }catch(error){
           const errorCode = error.code;
@@ -39,7 +42,7 @@ export default function LoginScreen() {
 
              <MyTextInput
                 value = {email}
-                placeholder = {"Username"}
+                placeholder = {"Email"}
                 onChange = {(text)=>{
                     setEmail(text);
                 }}

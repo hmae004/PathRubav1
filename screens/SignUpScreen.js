@@ -5,20 +5,61 @@ import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} fro
 import {app} from '../firebaseConfig'
 import { useNavigation } from "@react-navigation/native";
 import MyTextInput from "../components/MyTextInput";
+import {getFirestore,addDoc,collection} from 'firebase/firestore'
+
 
 export default function SignUpScreen() {
+  //Initialization
   const auth = getAuth(app);
   const navigation = useNavigation();
+  const db = getFirestore(app)
+  //Inputs
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullname, setFullName] = useState("");
- 
+  const [phone,setPhone] = useState("");
+  const [block,setBlock] = useState("");
+  const [room,setRoom] = useState("");
+
+  //Removing any rogue whitespaces from the email string to avoid errors
+  const cleanEmail = (email) => {
+    return email.replace(/\s/g, ''); // Removes all white spaces from email
+  };
+  
+  //Function to navigate to Main page
+  const gohome = async (email,password)=>{
+    try{
+      const userCredential = await signInWithEmailAndPassword(auth,email,password);
+      const user = userCredential.user;
+      //console.log('User signed in after signup: ',user);
+       navigation.reset({
+        index: 0,
+        routes: [{ name: 'Main' }], // Name of the screen to navigate after login
+      });
+
+    }catch(error){
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(Alert.alert(errorMessage));
+    }
+  }
+
+  //Function to sign up
   const signup = async ()=>{
     try{
-      const userCredential = await createUserWithEmailAndPassword(auth,email,password);
+      const cleanedEmail = cleanEmail(email);
+      const userCredential = await createUserWithEmailAndPassword(auth,cleanedEmail,password);
       const user = userCredential.user;
-      console.log('User created: ',email);
-      gohome(email,password);
+      console.log('User created: ',cleanedEmail);
+      gohome(cleanedEmail,password);
+      const docRef = await addDoc(collection(db,"users"),{
+        userid:user.uid,
+        name:fullname,
+        email:cleanedEmail,
+        phone:phone,
+        block:block,
+        room:room,
+      });
     }catch(error){
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -34,20 +75,7 @@ export default function SignUpScreen() {
     }
   }
 
-  const gohome = async (email,password)=>{
-    try{
-      const userCredential = await signInWithEmailAndPassword(auth,email,password);
-      const user = userCredential.user;
-      console.log('User signed in after signup: ',user);
-      navigation.navigate('Main');
-
-    }catch(error){
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(Alert.alert(errorMessage));
-    }
-  }
-
+  
   
   return (
     <View style={styles.container}>
@@ -56,6 +84,21 @@ export default function SignUpScreen() {
         value={fullname}
         onChange={setFullName}
         placeholder={"Fullname"}
+      />
+      <MyTextInput
+        value={phone}
+        onChange={setPhone}
+        placeholder={"Phone Number"}
+      />
+      <MyTextInput
+        value={block}
+        onChange={setBlock}
+        placeholder={"Block Name"}
+      />
+      <MyTextInput
+        value={room}
+        onChange={setRoom}
+        placeholder={"Room Number"}
       />
       <MyTextInput
         value={email}

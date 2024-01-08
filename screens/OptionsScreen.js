@@ -14,7 +14,7 @@ export default function OptionsScreen() {
     useEffect(()=>{
         const unsubscribe = onAuthStateChanged(auth,(user)=>{
             if(user){
-                console.log('User is signed in: ',user);
+                console.log('User is signed in:');
                 navigation.replace('Main');
             }
             else{
