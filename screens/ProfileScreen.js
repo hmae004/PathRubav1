@@ -4,6 +4,7 @@ import { app } from '../firebaseConfig';
 import { getAuth } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import EditProfile from './EditProfile';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
@@ -31,6 +32,10 @@ export default function ProfileScreen() {
     });
   };
 
+  const editProfile = () => {
+    navigation.navigate('Edit Profile')
+  };
+
   // Detect user and retrieve user id on component mount
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -54,18 +59,21 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-        {userData && ( // Check if userData exists before rendering
-        <View style={styles.detailsContainer}>
-          <Text>Name: {userData.name}</Text>
-          <Text>Phone: {userData.phone}</Text>
-          <Text>Block Number: {userData.block}</Text>
-          <Text>Room Number: {userData.room}</Text>
-        </View>
+    {userData && (
+      <View style={styles.detailsContainer}>
+        <Text style={styles.detailText}>Name: {userData.name}</Text>
+        <Text style={styles.detailText}>Phone: {userData.phone}</Text>
+        <Text style={styles.detailText}>Block Number: {userData.block}</Text>
+        <Text style={styles.detailText}>Room Number: {userData.room}</Text>
+      </View>
       )}
-      <Pressable style={styles.button} onPress={signout}>
-        <Text style={styles.text}>Sign Out</Text>
-      </Pressable>
-    </View>
+      <Pressable style={styles.button} onPress={null}>
+    <Text style={styles.text}>Edit Profile</Text>
+    </Pressable>
+    <Pressable style={styles.button} onPress={signout}>
+      <Text style={styles.text}>Sign Out</Text>
+    </Pressable>
+  </View>
   );
 }
 
@@ -74,20 +82,36 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#F0F8FF', // Light sky blue background
   },
-  detailsContainer:{
-
+  detailsContainer: {
+    backgroundColor: '#FFF0F5', // Lavender blush background for details
+    padding: 20,
+    borderRadius: 15,
+    margin: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
   text: {
-    color: 'white',
+    color: '#4B0082', // Indigo color for text
     textAlign: 'center',
-    fontFamily: 'serif',
-    fontWeight: 'bold',
+    fontSize: 16,
+    margin: 5,
   },
   button: {
-    backgroundColor: '#040720',
-    padding: 10,
-    borderRadius: 20,
+    backgroundColor: '#FFB6C1', // Light pink for button
+    padding: 15,
+    borderRadius: 25,
     width: '80%',
+    marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
+

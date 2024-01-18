@@ -16,6 +16,8 @@ import CreateRequest from './screens/CreateRequest';
 import OptionsScreen from './screens/OptionsScreen';
 import RequestDetails from './screens/RequestDetails';
 import AcceptDetailsScreen from './screens/AcceptDetails';
+import EditScreen from './screens/EditScreen';
+import EditProfile from './screens/EditProfile';
 
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons'; 
@@ -67,7 +69,7 @@ export default function App() {
                       let iconName;
 
                       if (route.name === 'Request') {
-                        return <AntDesign name="shoppingcart" size={size} color={color} />;
+                        return <AntDesign name="shoppingcart" size={24} color="black" />;
                       } else if (route.name === 'Accept') {
                         return <MaterialCommunityIcons name="cart-check" size={24} color="black" />
                       } else if (route.name === 'Profile') {
@@ -78,15 +80,16 @@ export default function App() {
                     tabBarInactiveTintColor: 'gray',
                   })}
                 >
-                  <Tab.Screen name="Request" component={RequestScreen} />
-                  <Tab.Screen name="Accept" component={AcceptScreen} />
+                  <Tab.Screen name="Request" component={RequestScreen} options={{ headerShown: false }}/>
+                  <Tab.Screen name="Accept" component={AcceptScreen} options={{ headerShown: false }}/>
                   <Tab.Screen name="Profile" component={ProfileScreen} />
                 </Tab.Navigator>
               )}
             </Stack.Screen>
             <Stack.Screen name="Create Request" component={CreateRequest} />
-            <Stack.Screen name="Request Details" component={RequestDetails} />
-            <Stack.Screen name="Accept Details" component={AcceptDetailsScreen} />
+            <Stack.Screen name="Request Details" component={RequestDetails} options={{ headerShown: false }}/>
+            <Stack.Screen name="Accept Details" component={AcceptDetailsScreen} options={{ headerShown: false }}/>
+            <Stack.Screen name="Edit Details" component={EditScreen} />
           </>
         )}
       </Stack.Navigator>

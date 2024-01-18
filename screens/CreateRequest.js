@@ -17,8 +17,7 @@ export default function CreateRequest() {
     const navigation = useNavigation();
     const db = getFirestore(app)
     const [currentUser, setCurrentUser] = useState(null);
-    const [userData, setUserData]
-     = useState(null);
+    const [userData, setUserData]= useState(null);
 
     //Finding user id
     useEffect(() => {
@@ -27,6 +26,7 @@ export default function CreateRequest() {
             // User is signed in
             const userID = user.uid;
             setCurrentUser(userID); // Set the current user's UID in state
+            getUserData(userID);
            // console.log('User ID:', userID);
           } else {
             // No user is signed in
@@ -34,10 +34,19 @@ export default function CreateRequest() {
             console.log('No user signed in');
           }
         });
-    
+ 
         // Unsubscribe to the listener when component unmounts
         return () => unsubscribe();
       }, []);
+
+      const getUserData = async (userID) => {
+        const q = query(collection(db, 'users'), where('userid', '==', userID));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          console.log(doc.id, '=>', doc.data());
+          setUserData(doc.data()); // Set user data in state
+        });
+      };
 
     //Designing dropdown
     const [showDropdown,setShowDropdown] = useState(false);
@@ -88,8 +97,10 @@ export default function CreateRequest() {
 
     //Writing request to firestore
     const results = async () => {
+        
+        //getting docs for existing request
         const existingRequest = await getDocs(
-          query(collection(db, "requests"), where("userid", "==", currentUser))
+          query(collection(db, "orders"), where("customerID", "==", currentUser))
         );
       
         if (existingRequest.size > 0) {
@@ -97,20 +108,26 @@ export default function CreateRequest() {
           Alert.alert("Error", "You have already placed a request.");
         } else {
           // If no existing request is found, proceed to add the request
-          const docRef = await addDoc(collection(db, "requests"), {
-            userid: currentUser,
+          const docRef = await addDoc(collection(db, "orders"), {
+            status:"request",
+            customerID: currentUser,
+            customerDetails:userData,
             place: selectedValue,
             order: items,
-            status: "pending",
             profit:10,
+            courierID:'',
+            courierDetails:'',
           });
           const acceptRef = collection(db, 'accept');
             await addDoc(acceptRef, {
-              userid: currentUser,
+              status:"request",
+              customerID: currentUser,
+              customerDetails:userData,
               place: selectedValue,
               order: items,
-              status: "pending",
               profit:10,
+              courierID:'',
+              courierDetails:'',
             });
           navigation.navigate("Main");
           
