@@ -45,7 +45,7 @@ export default function AcceptScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       <Text style={styles.sectionTitle}>Your Requests</Text>
       <FlatList
         data={yourRequests}

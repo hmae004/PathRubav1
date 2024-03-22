@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, StyleSheet,Pressable,Text,Alert,KeyboardAvoidingView } from "react-native";
+import { View, Image, StyleSheet,Pressable,Text,Alert,KeyboardAvoidingView, TextInput} from "react-native";
 import { useState,useEffect } from "react";
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
 import {app} from '../firebaseConfig'
@@ -40,20 +40,19 @@ export default function LoginScreen() {
         <View style= {styles.container}>
              <Image source = {require(".//logo.png")} style = {style.image}/>
 
-             <MyTextInput
-                value = {email}
-                placeholder = {"Email"}
-                onChange = {(text)=>{
-                    setEmail(text);
-                }}
+             <TextInput
+                style={styles.input}
+                onChangeText={setEmail}
+                value={email}
+                placeholder="Email"
              />
-             <MyTextInput
-                value = {password}
-                placeholder={"Password"}
-                onChange = {(text)=>{
-                    setPassword(text);}
-                }
-             />
+             <TextInput
+                    style={styles.input}
+                    onChangeText={setPassword}
+                    value={password}
+                    placeholder="Password"
+                    secureTextEntry
+                />
             <View style={{marginBottom:20}}/>
             <Pressable
             style = {styles.button}
@@ -61,7 +60,7 @@ export default function LoginScreen() {
             >
             <Text style = {styles.text}
             >
-                Login In
+                Login 
             </Text>
             </Pressable>
         </View>
@@ -81,6 +80,15 @@ styles = StyleSheet.create({
         alignItems:"center",
         backgroundColor:"white",
         paddingTop:250,
+    },
+    input:{
+      height:40,
+      width:'80%',
+      borderWidth:2,
+      borderColor:'gray',
+      borderRadius:10,
+      marginTop:15,
+      padding:10,
     },
     username:{
         borderWidth:1,

@@ -4,7 +4,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, updateDoc, query, where, getDocs,collection} from 'firebase/firestore';
 import { useNavigation } from "@react-navigation/native";
 import { app } from '../firebaseConfig';
-import { Ionicons } from '@expo/vector-icons'; 
+import { Ionicons } from '@expo/vector-icons';
 
 
 export default function EditScreen() {
